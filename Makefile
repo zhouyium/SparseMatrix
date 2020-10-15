@@ -34,8 +34,9 @@ all :
 .PHONY : clean
 clean :
 	@echo 'removeing all build file ...'
-	$(RM) -r *.so *.o
-	@$(RM) -r $(TEST_TARGET)
+	@$(RM) -r ./src/*.o
+	@$(RM) -r ./test/*.o
+	@$(RM) -r ./build/*
 	@echo 'done'
 
 #重新编译
