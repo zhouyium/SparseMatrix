@@ -1,6 +1,14 @@
 # SparseMatrix
 使用 C++ 实现对稀疏矩阵的相关操作。
 
+# CSR
+CSR 的数据存储图
+![Image text](./images/csr.jpg)
+
+# CSC
+CSC 的数据村出土
+![Image text](./images/csc.jpg)
+
 # 目录结构
 ├── LICENSE  
 ├── Makefile  
