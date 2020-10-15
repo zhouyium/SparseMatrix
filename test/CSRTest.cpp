@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
     CSRMatrix<int> xxx;
-    xxx.ToMatrix();
+    xxx.ToMatrix(3, 5);
 
     //std::vector 
     //CSRMatrix<int> xxx()
