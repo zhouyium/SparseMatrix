@@ -8,7 +8,7 @@ public:
     virtual ~SparseMatrix() {};
 
 public:
-    virtual void ToMatrix() = 0;   ///< 实现打印全矩阵功能
+    virtual void ToMatrix(unsigned long long rows, unsigned long long cols) = 0;   ///< 实现打印全矩阵功能
 
 private:
 };

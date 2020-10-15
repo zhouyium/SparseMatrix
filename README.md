@@ -1,13 +1,23 @@
 # SparseMatrix
 使用 C++ 实现对稀疏矩阵的相关操作。
 
+# COO
+COO 的数据存储图  
+![Image text](./images/coo.png)
+COO 动图展示  
+![Image text](./images/coo.gif)
+
 # CSR
 CSR 的数据存储图  
 ![Image text](./images/csr.png)
+CSR 动图展示  
+![Image text](./images/csr.gif)
 
 # CSC
 CSC 的数据存储图  
 ![Image text](./images/csc.png)
+CSC 动图展示  
+![Image text](./images/csc.gif)
 
 # 目录结构
 ├── LICENSE  
