@@ -16,6 +16,7 @@
 # 类说明
 SparseMatrix 类
     一个纯虚类。基类。
+
 CSRMatrix 类
     继承自 SparseMatrix，实现 CSR 的稀疏矩阵
 
