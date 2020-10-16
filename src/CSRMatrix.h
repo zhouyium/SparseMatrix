@@ -7,22 +7,33 @@
 #include <vector>
 #include <ctime>
 
+//namespace csr {
+
+class SparseMatrix;
+
 template <typename elementType>
 class CSRMatrix : SparseMatrix{
 public:
-    CSRMatrix() {}
+    CSRMatrix(unsigned long long rows, unsigned long long cols) : SparseMatrix(rows, cols) {}
 
     ~CSRMatrix() {}
 
     CSRMatrix(const std::vector<elementType>& row,
               const std::vector<elementType>& col,
               const std::vector<elementType>& data) {
-
+        //TBD
     }
 
+    /* support operators */
+public:
+    //matrix operator methods
+    //CSRMatrix&      operator=(const CSRMatrix& m);
+    //SparseMatrix    operator+(const SparseMatrix& m) const;
 
 public:
-    void ToMatrix(unsigned long long rows, unsigned long long cols) {
+    void ToMatrix() {
+        unsigned long long rows = getRows();
+        unsigned long long cols = getCols();
         unsigned long long i, j;
         elementType **array;//指向指针的指针，表示一个二维数组
         array=new elementType *[rows];//申请行
@@ -51,11 +62,16 @@ public:
     }
 
 private:
-    int _rowNums;//行数量
-    int _colNums;//列数量
-    std::vector<elementType> _row;//行信息
-    std::vector<elementType> _col;//列信息
-    std::vector<elementType> _data;//数据信息
-};
+    //! row index pointer vector
+    std::vector<elementType> _row;
+
+    //! column index pointer vector
+    std::vector<elementType> _col;
+
+    //! vector of non-zero elements and diagonal elements of matrix
+    std::vector<elementType> _data;
+}; //end of class CSRMatrix
+
+//} //end of namespace
 
 #endif
