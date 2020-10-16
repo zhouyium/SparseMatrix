@@ -25,6 +25,29 @@ int main() {
     vector<int> vc(col, col+sizeof(col)/sizeof(int));
     vector<int> vd(data, data+sizeof(data)/sizeof(int));
     CSRMatrix<int, int> c(4, 4, vr, vc, vd);
+    cout<<"===\n";
+    cout<<"0, 0:"<<c(0, 0)<<"\n";
+    cout<<"0, 1:"<<c(0, 1)<<"\n";
+    cout<<"0, 2:"<<c(0, 2)<<"\n";
+    cout<<"0, 3:"<<c(0, 3)<<"\n";
+    cout<<"\n";
+    cout<<"1, 0:"<<c(1, 0)<<"\n";
+    cout<<"1, 1:"<<c(1, 1)<<"\n";
+    cout<<"1, 2:"<<c(1, 2)<<"\n";
+    cout<<"1, 3:"<<c(1, 3)<<"\n";
+    cout<<"\n";
+    cout<<"2, 0:"<<c(2, 0)<<"\n";
+    cout<<"2, 1:"<<c(2, 1)<<"\n";
+    cout<<"2, 2:"<<c(2, 2)<<"\n";
+    cout<<"2, 3:"<<c(2, 3)<<"\n";
+    cout<<"2, 4:"<<c(2, 4)<<"\n";
+    cout<<"\n";
+    cout<<"3, 0:"<<c(3, 0)<<"\n";
+    cout<<"3, 1:"<<c(3, 1)<<"\n";
+    cout<<"3, 2:"<<c(3, 2)<<"\n";
+    cout<<"3, 3:"<<c(3, 3)<<"\n";
+    cout<<"===\n";
+
     c.ToMatrix();
     cout<<"===\n";
 

@@ -41,7 +41,7 @@ public:
     const std::vector<fT>&  operator()(void) const;
     void                    operator()(const std::vector<fT>& d);
 
-    const fT&               operator()(iT row, iT col) const;
+    const fT                operator()(iT row, iT col) const;
     void                    operator()(iT row, iT col, fT val);
 
     /* support operators */
@@ -167,8 +167,26 @@ inline void CSRMatrix<iT, fT>::operator()(const std::vector<fT>& d) {
  * @return value at specified matrix row and column
  */
 template <typename iT, typename fT>
-const fT& CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
-    //TBD
+const fT CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
+    iT rows = SparseMatrix<iT>::Rows();
+    iT cols = SparseMatrix<iT>::Cols();
+    iT rsz = this->_row.size()-1;
+    iT csz = this->_col.size();
+    
+    if (row>rsz || col>csz || row>rows || col>cols) {
+        //数据不存在
+        return 0;
+    }
+
+    //找到row索引
+    iT idx_st = _row[row];
+    iT idx_ed = _row[row+1];
+    for (iT j=idx_st; j<idx_ed; j++) {
+        //找 col 索引
+        if (col==_col[j]) {
+            return _data[j];
+        }
+    }
     return 0;
 }
 
@@ -181,6 +199,7 @@ const fT& CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
 template <typename iT, typename fT>
 void CSRMatrix<iT, fT>::operator()(iT row, iT col, fT val) {
     //TBD
+
 
 }
 
