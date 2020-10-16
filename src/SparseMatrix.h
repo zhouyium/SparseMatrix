@@ -2,9 +2,10 @@
 #ifndef __SPARSE_MATRIX_H_DE38UR83CNKUR8CJIJ8C382XH197R3__
 #define __SPARSE_MATRIX_H_DE38UR83CNKUR8CJIJ8C382XH197R3__
 
+template <typename iT>
 class SparseMatrix {
 public:
-    SparseMatrix(unsigned long long rows=1, unsigned long long cols=1) : 
+    SparseMatrix(iT rows=1, iT cols=1) : 
         _rows(rows),
         _cols(cols) {}
         
@@ -15,23 +16,23 @@ public:
     virtual void ToMatrix() = 0;
 
     //! get row number
-    unsigned long long getRows() const {return _rows;}
+    inline iT getRows() const {return _rows;}
 
     //! get col number
-    unsigned long long getCols() const {return _cols;}
+    inline iT getCols() const {return _cols;}
 
     //! set row number
-    void setRows(unsigned long long x) {_rows=x;}
+    inline void setRows(iT x) {_rows=x;}
 
     //! set col number
-    void setCols(unsigned long long x) {_cols=x;}
+    inline void setCols(iT x) {_cols=x;}
 
 private:
     //! row number
-    unsigned long long _rows;
+    iT _rows;
 
     //! col number
-    unsigned long long _cols;
-};
+    iT _cols;
+};//end of class SparseMatrix
 
 #endif
