@@ -15,10 +15,10 @@ public:
     virtual void ToMatrix() = 0;
 
     //! get row number
-    unsigned long long rows() const {return _rows;}
+    unsigned long long getRows() const {return _rows;}
 
     //! get col number
-    unsigned long long cols() const {return _cols;}
+    unsigned long long getCols() const {return _cols;}
 
     //! set row number
     void setRows(unsigned long long x) {_rows=x;}
