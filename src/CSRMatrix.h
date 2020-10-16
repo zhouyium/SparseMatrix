@@ -34,6 +34,10 @@ public:
     const std::vector<elementType>&  rowVector(void) const;
     void                             rowVector(const std::vector<elementType>& v);
 
+    std::vector<elementType>&        colVector(void);
+    const std::vector<elementType>&  colVector(void) const;
+    void                             colVector(const std::vector<elementType>& v);
+
     /* support operators */
 public:
     //matrix operator methods
@@ -76,6 +80,24 @@ inline const std::vector<elementType>& CSRMatrix<elementType>::rowVector(void) c
 template <typename elementType>
 inline void CSRMatrix<elementType>::rowVector(const std::vector<elementType>& v) { 
     _row = v; 
+}
+
+//! return column pointer vector
+template <typename elementType>
+inline std::vector<elementType>& CSRMatrix<elementType>::colVector(void) { 
+    return this->_col; 
+}
+
+//! return copy of column pointer vector
+template <typename elementType>
+inline const std::vector<elementType>& CSRMatrix<elementType>::colVector(void) const { 
+    return _col; 
+}
+
+//! set column pointer vector to specified vector
+template <typename elementType>
+inline void CSRMatrix<elementType>::colVector(const std::vector<elementType>& v) { 
+    _col = v; 
 }
 
 template <typename elementType>
