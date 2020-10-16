@@ -51,7 +51,7 @@ inline iT SparseMatrix<iT>::Rows() const {
 
 template <typename iT>
 inline void SparseMatrix<iT>::Rows(iT x) {
-    return this->_rows = x;
+    this->_rows = x;
 }
 
 template <typename iT>
@@ -61,7 +61,7 @@ inline iT SparseMatrix<iT>::Cols() const {
 
 template <typename iT>
 inline void SparseMatrix<iT>::Cols(iT x) {
-    return this->_cols = x;
+    this->_cols = x;
 }
 
 #endif
