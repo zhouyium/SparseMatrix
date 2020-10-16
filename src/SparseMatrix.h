@@ -4,13 +4,34 @@
 
 class SparseMatrix {
 public:
-    SparseMatrix() {};
-    virtual ~SparseMatrix() {};
+    SparseMatrix(unsigned long long rows=1, unsigned long long cols=1) : 
+        _rows(rows),
+        _cols(cols) {}
+        
+    virtual ~SparseMatrix() {}
 
 public:
-    virtual void ToMatrix(unsigned long long rows, unsigned long long cols) = 0;   ///< 实现打印全矩阵功能
+    //! print the full matrix
+    virtual void ToMatrix() = 0;
+
+    //! get row number
+    unsigned long long rows() const {return _rows;}
+
+    //! get col number
+    unsigned long long cols() const {return _cols;}
+
+    //! set row number
+    void setRows(unsigned long long x) {_rows=x;}
+
+    //! set col number
+    void setCols(unsigned long long x) {_cols=x;}
 
 private:
+    //! row number
+    unsigned long long _rows;
+
+    //! col number
+    unsigned long long _cols;
 };
 
 #endif
