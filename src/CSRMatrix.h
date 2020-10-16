@@ -13,12 +13,13 @@ template <typename iT, typename fT>
 class CSRMatrix : SparseMatrix<iT>{
 public:
     //! default constructor
-    CSRMatrix(iT rows, iT cols);
+    CSRMatrix(iT rows=1, iT cols=1);
 
     //! copy constructor
     CSRMatrix(const CSRMatrix& m);
 
-    ~CSRMatrix() {}
+    //! default destructor
+    ~CSRMatrix();
 
     CSRMatrix(const std::vector<iT>& row,
               const std::vector<iT>& col,
@@ -39,6 +40,9 @@ public:
     std::vector<fT>&        operator()(void);
     const std::vector<fT>&  operator()(void) const;
     void                    operator()(const std::vector<fT>& d);
+
+    const fT&               operator()(iT row, iT col) const;
+    void                    operator()(iT row, iT col, fT val);
 
     /* support operators */
 public:
@@ -72,6 +76,11 @@ template <typename iT, typename fT>
 CSRMatrix<iT, fT>::CSRMatrix(const CSRMatrix& m) : 
     SparseMatrix<iT>(m.getRows(), m.getCols()) {
 }
+
+//! default destructor
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>::~CSRMatrix() {
+} 
 
 //! return row pointer vector
 template <typename iT, typename fT>
@@ -125,6 +134,29 @@ inline const std::vector<fT>& CSRMatrix<iT, fT>::operator()(void) const {
 template <typename iT, typename fT>
 inline void CSRMatrix<iT, fT>::operator()(const std::vector<fT>& d) { 
     _data = d; 
+}
+
+/**
+ * return value at specified indices of matrix
+ * @param row matrix row
+ * @param col matrix column
+ * @return value at specified matrix row and column
+ */
+template <typename iT, typename fT>
+const fT& CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
+    //TBD
+    return 0;
+}
+
+/**
+ * set value at specified indices of matrix
+ * @param row matrix row
+ * @param col matrix column
+ * @param val value at specified matrix row and column
+ */
+template <typename iT, typename fT>
+void CSRMatrix<iT, fT>::operator()(iT row, iT col, fT val) {
+    //TBD
 }
 
 template <typename iT, typename fT>
