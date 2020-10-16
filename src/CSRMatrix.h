@@ -30,11 +30,15 @@ public:
     // accessors and mutators for class members
     std::vector<iT>&        rowVector(void);
     const std::vector<iT>&  rowVector(void) const;
-    void                                    rowVector(const std::vector<iT>& v);
+    void                    rowVector(const std::vector<iT>& v);
 
     std::vector<iT>&        colVector(void);
     const std::vector<iT>&  colVector(void) const;
-    void                                    colVector(const std::vector<iT>& v);
+    void                    colVector(const std::vector<iT>& v);
+
+    std::vector<fT>&        operator()(void);
+    const std::vector<fT>&  operator()(void) const;
+    void                    operator()(const std::vector<fT>& d);
 
     /* support operators */
 public:
@@ -66,9 +70,8 @@ CSRMatrix<iT, fT>::CSRMatrix(iT rows, iT cols) :
 //! copy constructor
 template <typename iT, typename fT>
 CSRMatrix<iT, fT>::CSRMatrix(const CSRMatrix& m) : 
-    SparseMatrix<iT>(m.getRows(), m.getCols) {
+    SparseMatrix<iT>(m.getRows(), m.getCols()) {
 }
-
 
 //! return row pointer vector
 template <typename iT, typename fT>
@@ -104,6 +107,24 @@ inline const std::vector<iT>& CSRMatrix<iT, fT>::colVector(void) const {
 template <typename iT, typename fT>
 inline void CSRMatrix<iT, fT>::colVector(const std::vector<iT>& v) { 
     _col = v; 
+}
+
+//! return vector of non-zero elements and diagonal elements of matrix
+template <typename iT, typename fT>
+inline std::vector<fT>& CSRMatrix<iT, fT>::operator()(void) { 
+    return this->_data; 
+}
+
+//! return copy of vector of non-zero elements and diagonal elements of matrix
+template <typename iT, typename fT>
+inline const std::vector<fT>& CSRMatrix<iT, fT>::operator()(void) const { 
+    return _data; 
+}
+
+//! set vector of non-zero elements and diagonal elements of matrix to specified vector
+template <typename iT, typename fT>
+inline void CSRMatrix<iT, fT>::operator()(const std::vector<fT>& d) { 
+    _data = d; 
 }
 
 template <typename iT, typename fT>
