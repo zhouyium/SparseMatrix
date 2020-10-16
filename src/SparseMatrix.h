@@ -5,27 +5,27 @@
 template <typename iT>
 class SparseMatrix {
 public:
-    SparseMatrix(iT rows=1, iT cols=1) : 
-        _rows(rows),
-        _cols(cols) {}
-        
-    virtual ~SparseMatrix() {}
+    //! default constructor
+    SparseMatrix(iT rows=1, iT cols=1);
+
+    //! default destructor    
+    virtual ~SparseMatrix();
 
 public:
     //! print the full matrix
     virtual void ToMatrix() = 0;
 
     //! get row number
-    inline iT getRows() const {return _rows;}
-
-    //! get col number
-    inline iT getCols() const {return _cols;}
+    iT Rows() const;
 
     //! set row number
-    inline void setRows(iT x) {_rows=x;}
+    void Rows(iT x);
+
+    //! get col number
+    iT Cols() const;
 
     //! set col number
-    inline void setCols(iT x) {_cols=x;}
+    void Cols(iT x);
 
 private:
     //! row number
@@ -34,5 +34,34 @@ private:
     //! col number
     iT _cols;
 };//end of class SparseMatrix
+
+template <typename iT>
+SparseMatrix<iT>::SparseMatrix(iT rows, iT cols) : _rows(rows),
+    _cols(cols) {
+}
+
+template <typename iT>
+SparseMatrix<iT>::~SparseMatrix() {
+}
+
+template <typename iT>
+inline iT SparseMatrix<iT>::Rows() const {
+    return this->_rows;
+}
+
+template <typename iT>
+inline void SparseMatrix<iT>::Rows(iT x) {
+    return this->_rows = x;
+}
+
+template <typename iT>
+inline iT SparseMatrix<iT>::Cols() const {
+    return this->_cols;
+}
+
+template <typename iT>
+inline void SparseMatrix<iT>::Cols(iT x) {
+    return this->_cols = x;
+}
 
 #endif
