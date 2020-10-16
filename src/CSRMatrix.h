@@ -9,34 +9,32 @@
 
 //namespace csr {
 
-class SparseMatrix;
-
-template <typename elementType>
-class CSRMatrix : SparseMatrix{
+template <typename iT, typename fT>
+class CSRMatrix : SparseMatrix<iT>{
 public:
     //! default constructor
-    CSRMatrix(unsigned long long rows, unsigned long long cols);
+    CSRMatrix(iT rows, iT cols);
 
-    //! default constructor
+    //! copy constructor
     CSRMatrix(const CSRMatrix& m);
 
     ~CSRMatrix() {}
 
-    CSRMatrix(const std::vector<elementType>& row,
-              const std::vector<elementType>& col,
-              const std::vector<elementType>& data) {
+    CSRMatrix(const std::vector<iT>& row,
+              const std::vector<iT>& col,
+              const std::vector<fT>& data) {
         //TBD
     }
 
 public:
     // accessors and mutators for class members
-    std::vector<elementType>&        rowVector(void);
-    const std::vector<elementType>&  rowVector(void) const;
-    void                             rowVector(const std::vector<elementType>& v);
+    std::vector<iT>&        rowVector(void);
+    const std::vector<iT>&  rowVector(void) const;
+    void                                    rowVector(const std::vector<iT>& v);
 
-    std::vector<elementType>&        colVector(void);
-    const std::vector<elementType>&  colVector(void) const;
-    void                             colVector(const std::vector<elementType>& v);
+    std::vector<iT>&        colVector(void);
+    const std::vector<iT>&  colVector(void) const;
+    void                                    colVector(const std::vector<iT>& v);
 
     /* support operators */
 public:
@@ -50,65 +48,73 @@ public:
 
 private:
     //! row index pointer vector
-    std::vector<elementType> _row;
+    std::vector<iT> _row;
 
     //! column index pointer vector
-    std::vector<elementType> _col;
+    std::vector<iT> _col;
 
     //! vector of non-zero elements and diagonal elements of matrix
-    std::vector<elementType> _data;
+    std::vector<fT> _data;
 }; //end of class CSRMatrix
 
 //! default constructor
-template <typename elementType>
-CSRMatrix<elementType>::CSRMatrix(unsigned long long rows, unsigned long long cols) : SparseMatrix(rows, cols) {
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>::CSRMatrix(iT rows, iT cols) : 
+    SparseMatrix<iT>(rows, cols) {
 }
 
+//! copy constructor
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>::CSRMatrix(const CSRMatrix& m) : 
+    SparseMatrix<iT>(m.getRows(), m.getCols) {
+}
+
+
 //! return row pointer vector
-template <typename elementType>
-inline std::vector<elementType>& CSRMatrix<elementType>::rowVector(void) { 
+template <typename iT, typename fT>
+inline std::vector<iT>& CSRMatrix<iT, fT>::rowVector(void) { 
     return this->_row; 
 }
 
 //! return copy of row pointer vector
-template <typename elementType>
-inline const std::vector<elementType>& CSRMatrix<elementType>::rowVector(void) const { 
+template <typename iT, typename fT>
+inline const std::vector<iT>& CSRMatrix<iT, fT>::rowVector(void) const { 
     return _row; 
 }
 
 //! set row pointer vector to specified vector 
-template <typename elementType>
-inline void CSRMatrix<elementType>::rowVector(const std::vector<elementType>& v) { 
+template <typename iT, typename fT>
+inline void CSRMatrix<iT, fT>::rowVector(const std::vector<iT>& v) { 
     _row = v; 
 }
 
 //! return column pointer vector
-template <typename elementType>
-inline std::vector<elementType>& CSRMatrix<elementType>::colVector(void) { 
+template <typename iT, typename fT>
+inline std::vector<iT>& CSRMatrix<iT, fT>::colVector(void) { 
     return this->_col; 
 }
 
 //! return copy of column pointer vector
-template <typename elementType>
-inline const std::vector<elementType>& CSRMatrix<elementType>::colVector(void) const { 
+template <typename iT, typename fT>
+inline const std::vector<iT>& CSRMatrix<iT, fT>::colVector(void) const { 
     return _col; 
 }
 
 //! set column pointer vector to specified vector
-template <typename elementType>
-inline void CSRMatrix<elementType>::colVector(const std::vector<elementType>& v) { 
+template <typename iT, typename fT>
+inline void CSRMatrix<iT, fT>::colVector(const std::vector<iT>& v) { 
     _col = v; 
 }
 
-template <typename elementType>
-void CSRMatrix<elementType>::ToMatrix() {
-    unsigned long long rows = getRows();
-    unsigned long long cols = getCols();
-    unsigned long long i, j;
-    elementType **array;//指向指针的指针，表示一个二维数组
-    array=new elementType *[rows];//申请行
+template <typename iT, typename fT>
+void CSRMatrix<iT, fT>::ToMatrix() {
+    iT rows = SparseMatrix<iT>::getRows();
+    iT cols = SparseMatrix<iT>::getCols();
+    iT i, j;
+    fT **array;//指向指针的指针，表示一个二维数组
+    array=new fT *[rows];//申请行
     for (i=0; i<rows; i++) {
-        array[i]=new elementType[cols];//申请列
+        array[i]=new fT[cols];//申请列
     }
     std::cout<<"row nums is "<<rows<<" col nums is "<<cols<<"\n";
 
