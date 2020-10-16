@@ -7,16 +7,16 @@
 #include <vector>
 #include <ctime>
 
-template <typename T>
+template <typename elementType>
 class CSRMatrix : SparseMatrix{
 public:
     CSRMatrix() {}
 
     ~CSRMatrix() {}
 
-    CSRMatrix(const std::vector<T>& row,
-              const std::vector<T>& col,
-              const std::vector<T>& data) {
+    CSRMatrix(const std::vector<elementType>& row,
+              const std::vector<elementType>& col,
+              const std::vector<elementType>& data) {
 
     }
 
@@ -24,10 +24,10 @@ public:
 public:
     void ToMatrix(unsigned long long rows, unsigned long long cols) {
         unsigned long long i, j;
-        T **array;//指向指针的指针，表示一个二维数组
-        array=new T *[rows];//申请行
+        elementType **array;//指向指针的指针，表示一个二维数组
+        array=new elementType *[rows];//申请行
         for (i=0; i<rows; i++) {
-            array[i]=new T[cols];//申请列
+            array[i]=new elementType[cols];//申请列
         }
         std::cout<<"row nums is "<<rows<<" col nums is "<<cols<<"\n";
 
@@ -53,9 +53,9 @@ public:
 private:
     int _rowNums;//行数量
     int _colNums;//列数量
-    std::vector<T> _row;//行信息
-    std::vector<T> _col;//列信息
-    std::vector<T> _data;//数据信息
+    std::vector<elementType> _row;//行信息
+    std::vector<elementType> _col;//列信息
+    std::vector<elementType> _data;//数据信息
 };
 
 #endif
