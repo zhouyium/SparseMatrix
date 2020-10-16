@@ -6,8 +6,8 @@
 using namespace std;
 
 int main() {
-    CSRMatrix<int> xxx;
-    xxx.ToMatrix(3, 5);
+    CSRMatrix<int> xxx(3, 5);
+    xxx.ToMatrix();
 
     //std::vector 
     //CSRMatrix<int> xxx()
