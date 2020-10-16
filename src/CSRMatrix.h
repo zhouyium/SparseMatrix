@@ -18,14 +18,14 @@ public:
     //! copy constructor
     CSRMatrix(const CSRMatrix& m);
 
+    CSRMatrix(iT rows,
+        iT cols,
+        const std::vector<iT>& row,
+        const std::vector<iT>& col,
+        const std::vector<fT>& data);
+
     //! default destructor
     ~CSRMatrix();
-
-    CSRMatrix(const std::vector<iT>& row,
-              const std::vector<iT>& col,
-              const std::vector<fT>& data) {
-        //TBD
-    }
 
 public:
     // accessors and mutators for class members
@@ -47,12 +47,20 @@ public:
     /* support operators */
 public:
     //matrix operator methods
-    //CSRMatrix&      operator=(const CSRMatrix& m);
-    //SparseMatrix    operator+(const SparseMatrix& m) const;
+    CSRMatrix&              operator=(const CSRMatrix& m);
+#if 0
+    CSRMatrix               operator+(const CSRMatrix& m) const;
+    CSRMatrix               operator+=(const CSRMatrix& m) const;
+    CSRMatrix               operator-(const CSRMatrix& m) const;
+    CSRMatrix               operator-=(const CSRMatrix& m) const;
+    CSRMatrix               operator*(const CSRMatrix& m) const;
+    CSRMatrix               operator*(fT alpha) const;
+    std::vector<fT>         operator*(const std::vector<fT> v) const;
+#endif
 
 public:
     //! print the matrix
-    void ToMatrix();
+    virtual void ToMatrix();
 
 private:
     //! row index pointer vector
@@ -67,14 +75,30 @@ private:
 
 //! default constructor
 template <typename iT, typename fT>
-CSRMatrix<iT, fT>::CSRMatrix(iT rows, iT cols) : 
-    SparseMatrix<iT>(rows, cols) {
+CSRMatrix<iT, fT>::CSRMatrix(iT rows, iT cols) : SparseMatrix<iT>(rows, cols) {
+    //
+    _row.empty();
+    _col.empty();
+    _data.empty();
 }
 
 //! copy constructor
 template <typename iT, typename fT>
-CSRMatrix<iT, fT>::CSRMatrix(const CSRMatrix& m) : 
-    SparseMatrix<iT>(m.getRows(), m.getCols()) {
+CSRMatrix<iT, fT>::CSRMatrix(const CSRMatrix& m) : SparseMatrix<iT>(m.Rows(), m.Cols()),
+    _row(m.rowVector()),
+    _col(m.colVector()), 
+    _data(m()) {
+}
+
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>::CSRMatrix(iT rows,
+    iT cols,
+    const std::vector<iT>& row,
+    const std::vector<iT>& col,
+    const std::vector<fT>& data) : SparseMatrix<iT>(rows, cols),
+    _row(row),
+    _col(col),
+    _data(data) {
 }
 
 //! default destructor
@@ -157,37 +181,55 @@ const fT& CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
 template <typename iT, typename fT>
 void CSRMatrix<iT, fT>::operator()(iT row, iT col, fT val) {
     //TBD
+
+}
+
+// matrix operator methods
+/**
+ * matrix assignment
+ * @param m assign this to m (ie. produce a "deep" copy)
+ * @return copy
+ */
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>& CSRMatrix<iT, fT>::operator=(const CSRMatrix<iT,fT>& m) {
+	if (this != &m) {
+		// perform copy
+        this->Rows(m.Rows());
+        this->Cols(m.Cols());
+		this->rowVector(m.rowVector());
+        this->colVector(m.colVector());
+		(*this)(m());
+	}
+	
+	// return reference
+	return (*this);	
 }
 
 template <typename iT, typename fT>
 void CSRMatrix<iT, fT>::ToMatrix() {
-    iT rows = SparseMatrix<iT>::getRows();
-    iT cols = SparseMatrix<iT>::getCols();
-    iT i, j;
-    fT **array;//指向指针的指针，表示一个二维数组
-    array=new fT *[rows];//申请行
-    for (i=0; i<rows; i++) {
-        array[i]=new fT[cols];//申请列
-    }
+    iT rows = SparseMatrix<iT>::Rows();
+    iT cols = SparseMatrix<iT>::Cols();
+
     std::cout<<"row nums is "<<rows<<" col nums is "<<cols<<"\n";
 
-    //这里使用随机数
-    int maxx=200;
-    int minx=1;
-
-    srand((unsigned int)time(NULL));
-    for (i=0; i<rows; i++) {
-        for (j=0; j<cols; j++) {
-            int x=rand()%(maxx-minx+1)+minx;
+    iT idx=0;
+    iT sz = _row.size();
+    for (iT i=0; i<rows; i++) {
+        //确定本行有几个数据
+        iT nums=0;
+        if (sz>i) {
+            nums=_row[i+1]-_row[i];//本行数据个数
+        }
+        for (iT j=0; j<cols; j++) {
+            fT x = 0;
+            if (0!=nums && j==_col[idx]) {
+                x = _data[idx];
+                idx++;
+            }
             std::cout<<x<<' ';
         }
         std::cout<<'\n';
     }
-
-    for (i=0; i<rows; i++) {
-        delete[] array[i];//释放列
-    }
-    delete[] array;//释放行        
 }
 
 //} //end of namespace
