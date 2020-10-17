@@ -4,6 +4,7 @@
 
 #include "SparseMatrix.h"
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <ctime>
 
@@ -62,6 +63,9 @@ public:
     //! print the matrix
     virtual void ToMatrix();
 
+protected:
+    void Init(iT x);
+
 private:
     //! row index pointer vector
     std::vector<iT> _row;
@@ -77,9 +81,7 @@ private:
 template <typename iT, typename fT>
 CSRMatrix<iT, fT>::CSRMatrix(iT rows, iT cols) : SparseMatrix<iT>(rows, cols) {
     //
-    _row.empty();
-    _col.empty();
-    _data.empty();
+    Init(rows);
 }
 
 //! copy constructor
@@ -105,6 +107,15 @@ CSRMatrix<iT, fT>::CSRMatrix(iT rows,
 template <typename iT, typename fT>
 CSRMatrix<iT, fT>::~CSRMatrix() {
 } 
+
+template <typename iT, typename fT>
+void CSRMatrix<iT, fT>::Init(iT x) {
+    //初始化数据
+    _row.reserve(x+1);
+    for (iT i=0; i<=x; i++) {
+        _row.push_back(0);
+    }
+}
 
 //! return row pointer vector
 template <typename iT, typename fT>
@@ -168,6 +179,11 @@ inline void CSRMatrix<iT, fT>::operator()(const std::vector<fT>& d) {
  */
 template <typename iT, typename fT>
 const fT CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
+    row--;
+    col--;
+    if (row<0 || col<0) {
+        return 0;
+    }
     iT rows = SparseMatrix<iT>::Rows();
     iT cols = SparseMatrix<iT>::Cols();
     iT rsz = this->_row.size()-1;
@@ -175,6 +191,7 @@ const fT CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
     
     if (row>rsz || col>csz || row>rows || col>cols) {
         //数据不存在
+        std::cout<<__FILE__<<" "<<__LINE__<<"\n";
         return 0;
     }
 
@@ -198,9 +215,83 @@ const fT CSRMatrix<iT, fT>::operator()(iT row, iT col) const {
  */
 template <typename iT, typename fT>
 void CSRMatrix<iT, fT>::operator()(iT row, iT col, fT val) {
-    //TBD
+    row--;
+    col--;
+    if (row<0 || col<0) {
+        return;
+    }
 
+    iT rows = SparseMatrix<iT>::Rows();
+    iT cols = SparseMatrix<iT>::Cols();
+    if (row>rows || col>cols) {
+        std::cout<<__FILE__<<" "<<__LINE__<<"\n";
+        return;
+    }
 
+    if (0==_row[rows] && 0==val) {
+        return;
+    }
+
+    //列索引
+    typename std::vector<iT>::iterator itc = _col.begin();
+    iT idx=0;
+    //找起点
+    for (iT i=_row[row]; i>0; i--) {
+        itc++;
+        idx++;
+    }
+    while (itc!=_col.end() && idx<_row[row+1] && *itc<col) {
+        itc++;
+        idx++;
+    }
+
+    //数据索引
+    typename std::vector<fT>::iterator itd = _data.begin();
+    for (iT i=0; i<idx; i++) {
+        itd++;
+    }
+
+    //看是插入还是修改. 1 插入,2修改,3删除
+    int op=1;
+    if (false==_col.empty() && *itc==col) {
+        op=2;
+        if (0==val) {
+            op=3;
+        }
+    }
+    if (1==op) {
+        _col.insert(itc, col);
+        _data.insert(itd, val);
+        //行索引全部加一
+        for (iT i=row+1; i<=rows; i++) {
+            _row[i]++;
+        }
+    } else if (2==op) {
+        *itd=val;
+    } else {
+        _col.erase(itc);
+        _data.erase(itd);
+        //行索引全部减一
+        for (iT i=row+1; i<=rows; i++) {
+            _row[i]--;
+        }
+    }
+#if 0
+    std::cout<<__FILE__<<"\n";
+    std::cout<<"_row is:";
+    for (itc=_row.begin(); itc!=_row.end(); itc++) {
+        std::cout<<*itc<<" ";
+    }
+    std::cout<<"\n_col is:";
+    for (itc=_col.begin(); itc!=_col.end(); itc++) {
+        std::cout<<*itc<<" ";
+    }
+    std::cout<<"\n_data is:";
+    for (itd=_data.begin(); itd!=_data.end(); itd++) {
+        std::cout<<*itd<<" ";
+    }
+    std::cout<<"\n";
+#endif
 }
 
 // matrix operator methods
@@ -219,7 +310,6 @@ CSRMatrix<iT, fT>& CSRMatrix<iT, fT>::operator=(const CSRMatrix<iT,fT>& m) {
         this->colVector(m.colVector());
 		(*this)(m());
 	}
-	
 	// return reference
 	return (*this);	
 }
@@ -229,21 +319,18 @@ void CSRMatrix<iT, fT>::ToMatrix() {
     iT rows = SparseMatrix<iT>::Rows();
     iT cols = SparseMatrix<iT>::Cols();
 
-    std::cout<<"row nums is "<<rows<<" col nums is "<<cols<<"\n";
+    //std::cout<<"row nums is "<<rows<<" col nums is "<<cols<<"\n";
 
     iT idx=0;
-    iT sz = _row.size();
     for (iT i=0; i<rows; i++) {
         //确定本行有几个数据
-        iT nums=0;
-        if (sz>i) {
-            nums=_row[i+1]-_row[i];//本行数据个数
-        }
+        iT nums=_row[i+1]-_row[i];//本行数据个数
         for (iT j=0; j<cols; j++) {
             fT x = 0;
-            if (0!=nums && j==_col[idx]) {
+            if (nums>0 && j==_col[idx]) {
                 x = _data[idx];
                 idx++;
+                nums--;
             }
             std::cout<<x<<' ';
         }
