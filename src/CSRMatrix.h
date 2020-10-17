@@ -50,8 +50,8 @@ public:
     //matrix operator methods
     CSRMatrix&              operator=(const CSRMatrix& m);
     CSRMatrix               operator+(const CSRMatrix& m);
+    CSRMatrix               operator+=(const CSRMatrix& m);
 #if 0
-    CSRMatrix               operator+=(const CSRMatrix& m) const;
     CSRMatrix               operator-(const CSRMatrix& m) const;
     CSRMatrix               operator-=(const CSRMatrix& m) const;
     CSRMatrix               operator*(const CSRMatrix& m) const;
@@ -344,7 +344,7 @@ void CSRMatrix<iT, fT>::ToMatrix() {
  * @return result of matrix addition
  */
 template <typename iT, typename fT>
-CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+(const CSRMatrix<iT,fT>& m) {
+CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+(const CSRMatrix<iT, fT>& m) {
     iT rows = SparseMatrix<iT>::Rows();
     iT cols = SparseMatrix<iT>::Cols();
     //创建一个新的矩阵
@@ -408,6 +408,13 @@ CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+(const CSRMatrix<iT,fT>& m) {
     return ret;
 }
 
+template <typename iT, typename fT>
+CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+=(const CSRMatrix<iT, fT>& m) {
+    //创建一个新的矩阵
+    CSRMatrix<iT, fT> ret(this->Rows(), this->Cols());
+    ret = ret+m;
+    return ret;
+}
 //} //end of namespace
 
 #endif
