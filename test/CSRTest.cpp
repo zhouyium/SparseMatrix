@@ -41,7 +41,7 @@ int main() {
     CSRMatrix<int, int> b(15, 15);
     b(1, 2, 4);
     b(1, 1, -3);
-    b(3, 3, 9);
+    b(3, 3, -5);
     b(15, 15, -3);
     b.ToMatrix();
 
@@ -68,7 +68,7 @@ int main() {
 
     cout<<"===\n";
 
-    a+=b;
+    a-=b;
     a.ToMatrix();
     cout<<"===\n";
 
