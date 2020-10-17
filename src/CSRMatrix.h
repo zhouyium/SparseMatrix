@@ -51,9 +51,9 @@ public:
     CSRMatrix&              operator=(const CSRMatrix& m);
     CSRMatrix               operator+(const CSRMatrix& m);
     CSRMatrix&              operator+=(const CSRMatrix& m);
+    CSRMatrix               operator-(const CSRMatrix& m);
+    CSRMatrix&              operator-=(const CSRMatrix& m);
 #if 0
-    CSRMatrix               operator-(const CSRMatrix& m) const;
-    CSRMatrix&              operator-=(const CSRMatrix& m) const;
     CSRMatrix               operator*(const CSRMatrix& m) const;
     CSRMatrix               operator*(fT alpha) const;
     std::vector<fT>         operator*(const std::vector<fT> v) const;
@@ -408,12 +408,100 @@ CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+(const CSRMatrix<iT, fT>& m) {
     return ret;
 }
 
+/**
+ * matrix addition
+ * @param m matrix to add to this
+ * @return result of matrix addition
+ */
 template <typename iT, typename fT>
 CSRMatrix<iT, fT>& CSRMatrix<iT, fT>::operator+=(const CSRMatrix<iT, fT>& m) {
     //创建一个新的矩阵
     *this = *this+m;
     return *this;
 }
+
+/**
+ * matrix addition
+ * @param m matrix to add to this
+ * @return result of matrix addition
+ */
+template <typename iT, typename fT>
+CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator-(const CSRMatrix<iT, fT>& m) {
+    iT rows = SparseMatrix<iT>::Rows();
+    iT cols = SparseMatrix<iT>::Cols();
+    //创建一个新的矩阵
+    CSRMatrix<iT, fT> ret(rows, cols);
+    if (rows!=m.Rows() && cols!=m.Cols()) {
+        //保证行列数量相等
+        return ret;
+    }
+
+    //遍历 _row
+    typename std::vector<iT>::iterator itA = _col.begin();
+    typename std::vector<fT>::iterator ifA = _data.begin();
+    std::vector<iT> _colB=m.colVector();
+    std::vector<fT> _dataB=m();
+    typename std::vector<iT>::iterator itB = _colB.begin();
+    typename std::vector<fT>::iterator ifB = _dataB.begin();
+    for (iT i=0; i<rows; i++) {
+        iT numsA = _row[i+1]-_row[i];
+        iT numsB = m.rowVector()[i+1]-m.rowVector()[i];
+
+        if (0==numsA && 0==numsB) {
+            continue;
+        }
+        while (numsA>0 && numsB>0 && _col.end()!=itA && _colB.end()!=itB) {
+            if (*itA==*itB) {
+                if ((*ifA)!=(*ifB)) {
+                    ret(i+1, *itA+1, (*ifA)-(*ifB));
+                }
+                itA++;
+                ifA++;
+                numsA--;
+                itB++;
+                ifB++;
+                numsB--;
+            } else if (*itA>*itB) {
+                ret(i+1, *itB+1, 0-(*ifB));
+                itB++;
+                ifB++;
+                numsB--;
+            } else {
+                ret(i+1, *itA+1, *ifA);
+                itA++;
+                ifA++;
+                numsA--;
+            }
+        }
+        while (numsA>0 && _col.end()!=itA) {
+            ret(i+1, *itA+1, *ifA);
+            itA++;
+            ifA++;
+            numsA--;
+        }
+        while (numsB>0 && _colB.end()!=itB) {
+            ret(i+1, *itB+1, 0-(*ifB));
+            itB++;
+            ifB++;
+            numsB--;
+        }
+    }
+    
+    return ret;
+}
+
+/**
+ * matrix addition
+ * @param m matrix to add to this
+ * @return result of matrix addition
+ */
+template <typename iT, typename fT>
+CSRMatrix<iT, fT>& CSRMatrix<iT, fT>::operator-=(const CSRMatrix<iT, fT>& m) {
+    //创建一个新的矩阵
+    *this = *this-m;
+    return *this;
+}
+
 //} //end of namespace
 
 #endif
