@@ -50,10 +50,10 @@ public:
     //matrix operator methods
     CSRMatrix&              operator=(const CSRMatrix& m);
     CSRMatrix               operator+(const CSRMatrix& m);
-    CSRMatrix               operator+=(const CSRMatrix& m);
+    CSRMatrix&              operator+=(const CSRMatrix& m);
 #if 0
     CSRMatrix               operator-(const CSRMatrix& m) const;
-    CSRMatrix               operator-=(const CSRMatrix& m) const;
+    CSRMatrix&              operator-=(const CSRMatrix& m) const;
     CSRMatrix               operator*(const CSRMatrix& m) const;
     CSRMatrix               operator*(fT alpha) const;
     std::vector<fT>         operator*(const std::vector<fT> v) const;
@@ -409,11 +409,10 @@ CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+(const CSRMatrix<iT, fT>& m) {
 }
 
 template <typename iT, typename fT>
-CSRMatrix<iT, fT> CSRMatrix<iT, fT>::operator+=(const CSRMatrix<iT, fT>& m) {
+CSRMatrix<iT, fT>& CSRMatrix<iT, fT>::operator+=(const CSRMatrix<iT, fT>& m) {
     //创建一个新的矩阵
-    CSRMatrix<iT, fT> ret(this->Rows(), this->Cols());
-    ret = ret+m;
-    return ret;
+    *this = *this+m;
+    return *this;
 }
 //} //end of namespace
 

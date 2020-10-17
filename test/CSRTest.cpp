@@ -7,6 +7,93 @@
 using namespace std;
 
 int main() {
+    //矩阵加法测试
+    CSRMatrix<int, int> a(15, 15);
+    a(1, 1, 3);
+    a(2, 2, 6);
+    a(3, 2, 5);
+    a(3, 3, -5);
+    a(14, 14, -1);
+    a.ToMatrix();
+
+    std::vector<int> _row=a.rowVector();
+    typename std::vector<int>::iterator itR = _row.begin();
+    for (; itR!=_row.end(); itR++) {
+        std::cout<<*itR<<" ";
+    }
+    cout<<"\n";
+
+    std::vector<int> _col=a.colVector();
+    typename std::vector<int>::iterator itC = _col.begin();
+    for (; itC!=_col.end(); itC++) {
+        std::cout<<*itC<<" ";
+    }
+    cout<<"\n";
+
+    std::vector<int> _data=a();
+    typename std::vector<int>::iterator itD = _data.begin();
+    for (; itD!=_data.end(); itD++) {
+        std::cout<<*itD<<" ";
+    }
+    cout<<"\n";
+    cout<<"===\n";
+
+    CSRMatrix<int, int> b(15, 15);
+    b(1, 2, 4);
+    b(1, 1, -3);
+    b(3, 3, 9);
+    b(15, 15, -3);
+    b.ToMatrix();
+
+    _row=b.rowVector();
+    itR = _row.begin();
+    for (; itR!=_row.end(); itR++) {
+        std::cout<<*itR<<" ";
+    }
+    cout<<"\n";
+
+    _col=b.colVector();
+    itC = _col.begin();
+    for (; itC!=_col.end(); itC++) {
+        std::cout<<*itC<<" ";
+    }
+    cout<<"\n";
+
+    _data=b();
+    itD = _data.begin();
+    for (; itD!=_data.end(); itD++) {
+        std::cout<<*itD<<" ";
+    }
+    cout<<"\n";
+
+    cout<<"===\n";
+
+    a+=b;
+    a.ToMatrix();
+    cout<<"===\n";
+
+    _row=a.rowVector();
+    itR = _row.begin();
+    for (; itR!=_row.end(); itR++) {
+        std::cout<<*itR<<" ";
+    }
+    cout<<"\n";
+
+    _col=a.colVector();
+    itC = _col.begin();
+    for (; itC!=_col.end(); itC++) {
+        std::cout<<*itC<<" ";
+    }
+    cout<<"\n";
+
+    _data=a();
+    itD = _data.begin();
+    for (; itD!=_data.end(); itD++) {
+        std::cout<<*itD<<" ";
+    }
+    cout<<"\n";
+
+#if 0
     //矩阵a是一个零阵
     cout<<"赋值测试\n";
     CSRMatrix<int, int> a(5, 10);
@@ -105,9 +192,7 @@ int main() {
     cout<<"===\n";
     c.ToMatrix();
     cout<<"===\n";
-
-    //std::vector 
-    //CSRMatrix<int> xxx()
+#endif
 
     return 0;
 }
